@@ -1,0 +1,74 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block my_app_title %}
+Creditcard detail
+{% endblock %}
+
+{% block my_app_header %}
+<header class="masthead" style="background-image: url('/static/home/assets/img/about-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-15 col-lg-16 col-xl-14">
+                <div class="site-heading">
+                    <h1>{{ creditcard.name }}</h1>
+                    <span class="subheading">Detalles del curso</span>
+                </div>
+            </div>
+        </div>
+        <a class="button_custom" href="{% url 'creditcard:creditcard-add' %}">Crear nuevo Curso</a>
+    </div>
+</header>
+{% endblock %}
+
+
+{% block my_app_content %}
+<!-- Post preview-->
+<div class="post-preview">
+    <h3 class="post-subtitle">Código: {{ creditcard.code }}</h3>
+    <p class="post-meta">
+        Creado por
+        <span style="color: #0b4956;" href="">{{ creditcard.owner.username }}</span>
+        ( {{ creditcard.created_at }} )
+        <br>
+        Última fecha de actualización ( {{ creditcard.updated_at }} )
+    </p>
+    <p class="card-text ">{{ creditcard.description|safe }}</p> <!-- ckeditor-->
+
+    <!-- Update-Delete link only for the owner -->
+    {% if user == creditcard.owner or user.is_superuser %}
+        <p style="text-align: center">
+            <a href="{% url 'creditcard:creditcard-update' creditcard.id %}">
+                <i class="fa fa-pencil" style="color: #1c1c91;"></i> Editar Curso
+            </a>
+            &ensp; | &ensp;
+            <a href="{% url 'creditcard:creditcard-delete' creditcard.id %}">
+                <i class="fa fa-trash" style="color: #881a1a;"></i> Eliminar Curso
+            </a>
+        </p>
+    {% endif %}
+    
+    <!-- Divider-->
+    <hr class="my-4" />
+
+    <!-- Comment creation -->
+    <form method="post" action="{% url 'creditcard:comment-create' creditcard.id %}">
+        {% csrf_token %}
+        {{ comment_form }}
+    <input type="submit" value="Publicar comentario">
+    </form>
+    {% if not comments %}
+        <p></p>
+    {% endif %}
+
+    <!-- Comments list -->
+    {% for comment in comments %}
+        <p> {{ comment.text }}
+            ({{ comment.owner.username }} | {{ comment.updated_at }})
+            {% if user == comment.owner or user.is_superuser %}
+            <a href="{% url 'creditcard:comment-delete' comment.id %}"><i class="fa fa-trash" style="color: #881a1a;"></i></a>
+            {% endif %}
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}

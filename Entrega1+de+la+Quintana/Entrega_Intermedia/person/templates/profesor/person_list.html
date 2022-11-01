@@ -1,0 +1,37 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block my_app_title %}
+Profesor
+{% endblock %}
+
+{% block my_app_header %}
+    <header class="masthead" style="background-image: url('/static/home/assets/img/post-bg.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-15 col-lg-16 col-xl-14">
+                    <div class="site-heading">
+                        <h1>Listado de personas</h1>
+                        <span class="subheading">Entrega intermedia de la Quintana</span>
+                    </div>
+                </div>
+            </div>
+            <a class="button_custom" href="{% url 'person:person-add' %}">Crear nueva persona</a>
+        </div>
+    </header>
+{% endblock %}
+
+{% block my_app_content %}
+    {% for person in person_list %}
+        <!-- Post preview-->
+        <div class="post-preview">
+            <a href="{% url 'person:person-detail' person.id %}">
+                <h2 class="post-title">Nombre: {{ person.name }}  {{ person.last_name }}</h2>
+                <h3 class="post-subtitle">Email: {{ person.email }}</h3>
+                <h3 class="post-subtitle">Fecha de nacimiento: {{ person.birth_date }}</h3>
+            </a>
+        </div>
+        <!-- Divider-->
+        <hr class="my-4" />
+    {% endfor %}
+{% endblock %}

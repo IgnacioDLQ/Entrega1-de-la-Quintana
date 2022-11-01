@@ -1,0 +1,44 @@
+{% extends "home/index.html" %}
+{% load static %}
+
+{% block my_app_title %}
+Credit cards list
+{% endblock %}
+
+{% block my_app_header %}
+<header class="masthead" style="background-image: url('/static/home/assets/img/about-bg.jpg')">
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-15 col-lg-16 col-xl-14">
+                <div class="site-heading">
+                    <h1>Listado de tarjetas de credito</h1>
+                    <span class="subheading">Entrega intermedia de la Quintana</span>
+                </div>
+            </div>
+        </div>
+        <a class="button_custom" href="{% url 'creditcard:creditcard-add' %}">Crear nueva tarjeta</a>
+    </div>
+</header>
+{% endblock %}
+
+
+{% block my_app_content %}
+    {% for creditcard in creditcard_list %}
+        <!-- Post preview-->
+        <div class="post-preview">
+            <a href="{% url 'creditcard:creditcard-detail' creditcard.id %}">
+                <h2 class="post-title">Este es el curso de {{ creditcard.name }}</h2>
+                <h3 class="post-subtitle">Que tiene el código: {{ creditcard.code }}</h3>
+            </a>
+            <p class="post-meta">
+                Creado por
+                <span style="color: #0b4956;" href="">{{ creditcard.owner.username }}</span>
+                ( {{ creditcard.created_at }} )
+            </p>
+        </div>
+        <!-- Divider-->
+        <hr class="my-4" />
+    {% endfor %}
+{% endblock %}
+
+
